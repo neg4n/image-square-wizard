@@ -1,8 +1,23 @@
+
+
+
+https://github.com/user-attachments/assets/c9a5fca3-eff5-4efd-a837-e5e621018e7d
+
+
 # image-square-wizard
 
 **isw** _(image square wizard)_ pads rectangular or panoramic images to a square canvas using [`libvips`][libvips]. It
 measures the dominant colour (or accepts a user-provided colour / transparent
 fill) and expands the image evenly on each side.
+
+## Features
+
+- Fast. Built in C.
+- JPEG, PNG, WebP, HEIF/HEIC, TIFF, AVIF support out of the box.
+- Only one command. Specify input & output along with extensions and thats it.
+- Automatic detection of aspect ratio.
+- Probing of the dominant color of the image to be used for padding (by default).
+- Customization options, e.g. provide your own colors.
 
 ### Prerequisites
 
