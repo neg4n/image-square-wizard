@@ -19,6 +19,7 @@ struct isw_color {
 struct isw_options {
     enum isw_background_mode background_mode;
     struct isw_color manual_color;
+    bool blur_background;
 };
 
 int isw_process(const char *input_path,

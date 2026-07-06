@@ -38,12 +38,13 @@ static void print_version(void) {
 static void print_usage(FILE *out) {
     fprintf(out,
         "Usage:\n"
-        "  %s [--rcb SPEC] input output\n"
+        "  %s [--blur] [--rcb SPEC] input output\n"
         "  %s --help\n"
         "  %s --version\n"
         "\n"
         "Options:\n"
         "  -r, --rcb SPEC    Set resizer canvas background. Use 'transparent' or colors.\n"
+        "  --blur            Use a blurred background generated from the image.\n"
         "  --help            Show help and exit.\n"
         "  --version         Show version and exit.\n",
         program_name, program_name, program_name);
@@ -56,6 +57,7 @@ static void print_help(void) {
         "Description:\n"
         "  image-square-wizard pads images to a square canvas using libvips.\n"
         "  By default it probes the dominant color and uses it as the padding color.\n"
+        "  Add --blur to build a blurred background from the image itself.\n"
         "  Override the padding color with --rcb. Supported color formats:\n"
         "    - 'transparent' for an alpha background\n"
         "    - #rgb, #rrggbb, #rgba, #rrggbbaa\n"
@@ -106,20 +108,23 @@ static bool extension_supports_alpha(const char *ext) {
 int main(int argc, char **argv) {
     struct isw_options opts = {
         .background_mode = ISW_BG_AUTO,
-        .manual_color = { .comps = {0}, .bands = 0 }
+        .manual_color = { .comps = {0}, .bands = 0 },
+        .blur_background = false
     };
     char *background_spec = NULL;
 
     enum {
         OPT_HELP = 1,
         OPT_VERSION,
-        OPT_RCB
+        OPT_RCB,
+        OPT_BLUR
     };
 
     static const struct option long_opts[] = {
-        {"help",    no_argument,       NULL, OPT_HELP},
-        {"version", no_argument,       NULL, OPT_VERSION},
-        {"rcb",     required_argument, NULL, OPT_RCB},
+        {"help",     no_argument,       NULL, OPT_HELP},
+        {"version",  no_argument,       NULL, OPT_VERSION},
+        {"rcb",      required_argument, NULL, OPT_RCB},
+        {"blur",     no_argument,       NULL, OPT_BLUR},
         {0, 0, 0, 0}
     };
 
@@ -129,6 +134,9 @@ int main(int argc, char **argv) {
             case 'r':
             case OPT_RCB:
                 background_spec = optarg;
+                break;
+            case OPT_BLUR:
+                opts.blur_background = true;
                 break;
             case OPT_HELP:
                 print_help();
@@ -141,6 +149,10 @@ int main(int argc, char **argv) {
                 print_usage(stderr);
                 return EXIT_FAILURE;
         }
+    }
+
+    if (opts.blur_background && background_spec) {
+        die("--blur cannot be combined with --rcb");
     }
 
     if (background_spec) {

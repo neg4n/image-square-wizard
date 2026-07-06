@@ -32,4 +32,14 @@ isw_exe = executable('isw', srcs, install: true, install_dir: get_option('bindir
   dependencies: [vips_dep]
 )
 
+sh = find_program('sh')
+vips_cli = find_program('vips', required: false)
+vipsheader_cli = find_program('vipsheader', required: false)
+
+if vips_cli.found() and vipsheader_cli.found()
+  test('cli', sh,
+    args: [files('tests/run-cli-tests.sh'), isw_exe, vips_cli.full_path(), vipsheader_cli.full_path()]
+  )
+endif
+
 install_man('doc/isw.1')

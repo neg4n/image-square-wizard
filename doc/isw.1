@@ -5,6 +5,9 @@ isw \- pad images to a square canvas using libvips
 .SH SYNOPSIS
 .B isw
 [
+.B --blur
+]
+[
 .B --rcb
 .I SPEC
 ]
@@ -20,14 +23,21 @@ isw \- pad images to a square canvas using libvips
 \fBisw\fR (image-square-wizard) analyses the aspect ratio of an image and pads
 it to a square canvas via libvips. By default it probes the dominant color in
 the image and uses that color for the newly created borders. The utility can
-also accept an explicit background color or add transparent padding.
+also generate a blurred square background from the image itself, or
+accept an explicit background color / transparent padding.
 .SH OPTIONS
+.TP
+.B --blur
+Generate the resizer canvas background from a resized, cropped, blurred copy of
+the image. This opt-in mode creates a softer continuation of the original image
+for the newly created padding. It cannot be combined with \fB--rcb\fR.
 .TP
 .B -r, --rcb SPEC
 Set the resizer canvas background. Accepts \fItransparent\fR, hexadecimal
 colors (#rgb, #rrggbb, #rgba, #rrggbbaa) or comma separated numeric triples/
 quadruples (e.g. 12,34,56 or 12,34,56,128). Components must be between 0 and
-255. Transparency requires an alpha-capable output format.
+255. Transparency requires an alpha-capable output format. This option cannot
+be combined with \fB--blur\fR.
 .TP
 .B --help
 Show detailed help text and exit.

@@ -8,7 +8,8 @@ https://github.com/user-attachments/assets/c9a5fca3-eff5-4efd-a837-e5e621018e7d
 
 **isw** _(image square wizard)_ pads rectangular or panoramic images to a square canvas using [`libvips`][libvips]. It
 measures the dominant colour (or accepts a user-provided colour / transparent
-fill) and expands the image evenly on each side.
+fill) and expands the image evenly on each side. It can also build an
+opt-in blurred background from the image itself.
 
 ## Features
 
@@ -39,7 +40,12 @@ Run `meson install -C build` inside the repository's root in order to install th
 
 ### Usage
 
-Run `isw input.jpg output.png` or inspect options with `isw --help` or `man isw`.
+Run `isw input.jpg output.png` for the default solid dominant-colour padding,
+or `isw --blur input.jpg output.png` to generate a blurred square canvas
+from the image itself. Manual backgrounds still use `--rcb`; `--blur` and
+`--rcb` are mutually exclusive.
+
+Inspect options with `isw --help` or `man isw`.
 
 ## License
 
