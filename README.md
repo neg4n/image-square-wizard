@@ -6,10 +6,12 @@ https://github.com/user-attachments/assets/c9a5fca3-eff5-4efd-a837-e5e621018e7d
 
 # image-square-wizard
 
-**isw** _(image square wizard)_ pads rectangular or panoramic images to a square canvas using [`libvips`][libvips]. It
-measures the dominant colour (or accepts a user-provided colour / transparent
-fill) and expands the image evenly on each side. It can also build an
-opt-in blurred background from the image itself.
+**isw** _(image square wizard)_ pads rectangular or panoramic images to a
+square canvas using [`libvips`][libvips]. It measures the dominant colour (or
+accepts a user-provided colour / transparent fill) and expands the image evenly
+on each side. It can also build an opt-in blurred background from the image
+itself, which is useful for thumbnails, previews, and social posts where solid
+padding would look too flat.
 
 ## Features
 
@@ -40,10 +42,19 @@ Run `meson install -C build` inside the repository's root in order to install th
 
 ### Usage
 
-Run `isw input.jpg output.png` for the default solid dominant-colour padding,
-or `isw --blur input.jpg output.png` to generate a blurred square canvas
-from the image itself. Manual backgrounds still use `--rcb`; `--blur` and
-`--rcb` are mutually exclusive.
+Run `isw input.jpg output.png` for the default solid dominant-colour padding.
+
+Use `isw --blur input.jpg output.png` to generate the square canvas from the
+image itself:
+
+- The image is resized to cover the square canvas.
+- The covered image is centre-cropped, heavily blurred, and subtly toned.
+- The original image is inserted back in the centre unchanged.
+- For alpha-capable outputs, the generated blur padding is opaque while the
+  original image keeps its own alpha.
+
+Manual backgrounds still use `--rcb`; `--blur` and `--rcb` are mutually
+exclusive.
 
 Inspect options with `isw --help` or `man isw`.
 
